@@ -46,6 +46,7 @@ export default class Discover extends wepy.component {
     font-size: 30rpx;
     padding: 30rpx 0rpx;
     position: relative;
+    background: #f7f7f7;
 }
 
 .discover_title_doc {

@@ -39,6 +39,12 @@
     </view>
     <!--发现好商品模块-->
     <discover :list.sync="discoverList"></discover>
+
+    <view class="discover">
+      <view class="discover_title_doc">推荐商品</view>
+    </view>
+    <!--矩阵商品列表模块-->
+    <shopGridList :purchasetype.sync="purchasetype" :special.sync="special" :list.sync="list"></shopGridList>
     <!--加载更多时动画-->
     <bottomLoadMore :show.sync="showLoading" message="正在加载"></bottomLoadMore>
     <!--暂无数据显示-->
@@ -55,6 +61,7 @@ import Discover from '@/components/discover'
 import Bombscreen from '@/components/bomb_screen'
 import BottomLoadMore from "../components/common/bottomLoadMore"
 import Placeholder from "../components/common/placeholder"
+import ShopGridList from '@/components/shop_grid_list'
 export default class Home extends wepy.page {
   config = {
     navigationBarTitleText: '叮咚商城',
@@ -63,7 +70,8 @@ export default class Home extends wepy.page {
     discover: Discover,
     bottomLoadMore: BottomLoadMore,
     placeholder: Placeholder,
-    bombscreen: Bombscreen
+    bombscreen: Bombscreen,
+    shopGridList: ShopGridList
   }
   data = {
     indicatorDots: true,
@@ -72,6 +80,9 @@ export default class Home extends wepy.page {
     duration: 1000,
     indicatorActiveColor: "#fff",
     discoverList: [],
+    list: [],
+    purchasetype: 1,
+    special:1, ////0-正常入库;1-特价专区和换货专区
     //是否有数据
     is_empty: false,
     //当前页面
@@ -97,7 +108,7 @@ export default class Home extends wepy.page {
     });
     if (json.data.code == 0) {
       that.discoverList = [...that.discoverList, ...json.data.list];
-
+      /*
       if (json.data.page_total) { // 后台的数据不再返回page_total
       that.page_total = json.data.page_total
       };
@@ -105,12 +116,38 @@ export default class Home extends wepy.page {
         //暂无数据
         that.is_empty = true;
       }
+      */
       that.$apply();
     } else {
       tip.error(json.data.msg);
     }
     that.showLoading = false;
   }
+
+  async getGoodList(currentPage, size) {
+    let that = this;
+    //const json = await api.getGoodsList({
+    const json = await api.hostGoodsList({
+      query: {
+        page: currentPage || 1,
+        size: size || 10,
+        // locationFlag: 101
+      }
+    });
+    if (json.data.code == 0) {
+      that.list = [...that.list, ...json.data.list];
+      that.page_total = json.data.page_total;
+      if (json.data.page_total == 0) {
+        //暂无数据
+        that.is_empty = true;
+      }
+    } else {
+      tip.error(json.data.msg);
+    }
+    that.showLoading = false;
+    that.$apply();
+  }
+
   async getAdList() {
     const json = await api.getAdList({
       query: {}
@@ -122,9 +159,10 @@ export default class Home extends wepy.page {
   }
   onLoad() {
     let that = this;
-    this.discoverList = [];
-    that.getDiscoverList();
-    this.getAdList();
+    this.discoverList = []
+    that.getDiscoverList()
+    this.getAdList()
+    that.getGoodList()
   }
   computed = {}
   methods = {
@@ -174,8 +212,9 @@ export default class Home extends wepy.page {
       }
       that.preventRepeatReuqest = true;
       that.currentPage++;
-      that.getDiscoverList(that.currentPage);
-      that.preventRepeatReuqest = false;
+      // that.getDiscoverList(that.currentPage)
+      that.getGoodList(that.currentPage)
+      that.preventRepeatReuqest = false
     } else {
       that.showLoading = false;
     }
