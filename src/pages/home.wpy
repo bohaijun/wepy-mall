@@ -14,8 +14,8 @@
           <view class="search_input">搜索商品</view>
         </navigator>
         <navigator class="message" url="/pages/messages">
-          <i class="iconfont icon-message cfff"></i>
-          <view class="doc cfff">消息</view>
+          <i class="iconfont icon-message clightgray"></i>
+          <view class="doc clightgray">消息</view>
         </navigator>
       </view>
     </view>
@@ -57,7 +57,7 @@ import BottomLoadMore from "../components/common/bottomLoadMore"
 import Placeholder from "../components/common/placeholder"
 export default class Home extends wepy.page {
   config = {
-    navigationBarTitleText: '演示商城',
+    navigationBarTitleText: '叮咚商城',
   }
   components = {
     discover: Discover,
@@ -185,6 +185,7 @@ export default class Home extends wepy.page {
 </script>
 <style lang="less">
 .swiper {
+  margin-top: 100rpx;
   height: 348rpx;
 }
 
@@ -194,8 +195,9 @@ export default class Home extends wepy.page {
 }
 
 .pos {
-  position: absolute;
-  top: 0rpx;
+  position: fixed;
+  z-index: 1000;
+  top: 15rpx;
   left: 0;
   right: 0;
   .search_content {
@@ -203,7 +205,8 @@ export default class Home extends wepy.page {
     border: 1px solid #efefee;
     .icon-search,
     .search_input {
-      color: #efefee;
+      // color: #efefee;
+      color: #ffffff;
     }
   }
   .message {

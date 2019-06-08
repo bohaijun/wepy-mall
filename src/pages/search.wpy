@@ -272,11 +272,13 @@
     }
   }
   .btn_box {
-    width: 377rpx;
+    width: 277rpx;
     margin: 0 auto;
     padding-top: 88rpx;
     .button {
       color: #999;
+      height: 70rpx;
+      line-height: 70rpx;
     }
   }
   .active {
