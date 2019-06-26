@@ -3,8 +3,9 @@ import {
 } from '@/utils/wxRequest';
 
 let env = "-test" //-dev 或者 -test
-const apiMall = 'https://sujiefs.com/'
-// const apiMall = 'http://localhost:8080/'
+const dailyHost = 'https://sujiefs.com/'
+const onlineHost = 'https://sujiefs.com/'
+const apiMall = onlineHost
 
 /**
  * 获取发现好商品接口
